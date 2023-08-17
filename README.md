@@ -5,8 +5,8 @@ This project contains a simple web server and API server
 ## Setup
 
 1. Clone the repository:
-   git clone https://github.com/theaderonkeadebisi/servers-and-apis-assignment.git
-2. Navigate to the project directory: cd servers-and-apis-assignment
+   git clone https://github.com/theaderonkeadebisi/express-server-and-api-assignment.git
+2. Navigate to the project directory: cd express-servers-and-apis-assignment
 3. Run the following command to install express: npm install express
 
 ## Tests
