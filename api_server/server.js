@@ -3,26 +3,32 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
+const apiKeyAuth = require('./users/users.middleware');
+const usersRouter = require('./users/users.router');
 
+const usersDbPath = path.join(__dirname, './users/users.db.js');
 const itemsDbPath = path.join(__dirname, 'items.json');
 let itemsDB = [];
+let usersDB = [];
+
+const secretKey = '1234';
 
 app.use(express.json());
+app.use(apiKeyAuth);
+app.use('/users', usersRouter);
 
-app.get('/items', getAllItems);
-app.post('/items', addItem);
-app.put('/items/:id', updateItem);
-app.delete('/items/:id', deleteItem);
 
-app.use((req, res) => {
-    res.status(404).json({ message: 'Method Not Supported' });
-});
+app.post('/login', loginUser);
+app.get('/items', apiKeyAuth, getAllItems);
+app.post('/items', apiKeyAuth, authorizeAdmin, addItem);
+app.put('/items/:id', apiKeyAuth, authorizeAdmin, updateItem);
+app.delete('/items/:id', apiKeyAuth, authorizeAdmin, deleteItem);
 
 function getAllItems(req, res) {
     fs.readFile(itemsDbPath, 'utf8', (err, items) => {
         if (err) {
             console.log(err);
-            res.status(400).json({ message: 'An error occurred' });
+            res.status(500).json({ message: 'An error occurred' });
         }
         res.json(JSON.parse(items));
     });
@@ -89,5 +95,6 @@ const HOST_NAME = 'localhost';
 
 app.listen(PORT, HOST_NAME, () => {
     itemsDB = JSON.parse(fs.readFileSync(itemsDbPath, 'utf8'));
+    usersDB = JSON.parse(fs.readFileSync(usersDbPath, 'utf8'));
     console.log(`Server is listening on ${HOST_NAME}:${PORT}`);
 });
