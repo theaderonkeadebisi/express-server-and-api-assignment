@@ -6,7 +6,7 @@ const app = express();
 const apiKeyAuth = require('./users/users.middleware');
 const usersRouter = require('./users/users.router');
 
-const usersDbPath = path.join(__dirname, './users/users.db.js');
+const usersDbPath = path.join(__dirname, './users/users.json');
 const itemsDbPath = path.join(__dirname, 'items.json');
 let itemsDB = [];
 let usersDB = [];
