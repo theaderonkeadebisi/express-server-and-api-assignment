@@ -1,0 +1,12 @@
+[
+    {
+        "username": "Aderonke",
+        "apiKey": "1234",
+        "role": "admin"
+    },
+    {
+        "username": "Seyi",
+        "apiKey": "5678",
+        "role": "user"
+    }
+]
