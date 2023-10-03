@@ -1,8 +1,13 @@
-function createUser(req, res) {
-    const { username } = req.body;
+const fs = require('fs');
+const path = require('path');
+const usersDB = require('./users.json');
+const usersDbPath = path.join(__dirname, 'users', 'users.json');
 
-    if (!username) {
-        return res.status(400).json({ message: 'Username is required' });
+function CreateUser(req, res) {
+    const { username, apiKey, role } = req.body;
+
+    if (!username || !apiKey) {
+        return res.status(400).json({ message: 'Username and API Key are required' });
     }
 
     // Check for duplicate username
@@ -13,7 +18,7 @@ function createUser(req, res) {
     const newUser = {
         username,
         apiKey: generateApiKey(), // Generate a unique API key
-        role: 'user', // Default role for new users
+        role: 'user',
     };
 
     usersDB.push(newUser);
@@ -42,3 +47,9 @@ function loginUser(req, res) {
     const token = jwt.sign({ userId: user.id, role: user.role }, secretKey);
     res.json({ token });
 }
+
+module.exports = {
+    CreateUser,
+    generateApiKey,
+    loginUser
+};

@@ -3,10 +3,10 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const apiKeyAuth = require('./users/users.middleware');
+const { apiKeyAuth, ValidateUserCreation, authorizeAdmin } = require('./users/users.middleware');
 const usersRouter = require('./users/users.router');
 
-const usersDbPath = path.join(__dirname, './users/users.json');
+const usersDbPath = path.join(__dirname, 'users', 'users.json');
 const itemsDbPath = path.join(__dirname, 'items.json');
 let itemsDB = [];
 let usersDB = [];
@@ -15,10 +15,10 @@ const secretKey = '1234';
 
 app.use(express.json());
 app.use(apiKeyAuth);
+app.use(ValidateUserCreation);
 app.use('/users', usersRouter);
 
 
-app.post('/login', loginUser);
 app.get('/items', apiKeyAuth, getAllItems);
 app.post('/items', apiKeyAuth, authorizeAdmin, addItem);
 app.put('/items/:id', apiKeyAuth, authorizeAdmin, updateItem);
